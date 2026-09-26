@@ -1,7 +1,8 @@
-use eframe::{egui, wgpu::hal::DynAcquiredSurfaceTexture};
+use eframe::egui;
 
 use crate::sketch::Point;
 
+mod constrains;
 mod paint;
 mod sketch;
 
@@ -20,7 +21,7 @@ impl eframe::App for MyApp {
 
                 let sketch_response = self.sketch.ui(ui);
                 if sketch_response.clicked() {
-                    println!("coucou");
+                    println!("{}", sketch_response.hover_pos().unwrap());
                 }
             });
         });

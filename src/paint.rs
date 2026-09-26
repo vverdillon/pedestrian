@@ -12,12 +12,12 @@ impl sketch::Sketch {
         let canvas_size = vec2(canvas_width, canvas_height);
         let (response, painter) = ui.allocate_painter(canvas_size, Sense::click());
         let rect = response.rect;
-        let canvas_center = rect.center();
+        let _canvas_center = rect.center();
 
         // colors
         let red = Color32::from_rgb(255, 0, 0);
-        let green = Color32::from_rgb(0, 255, 0);
-        let blue = Color32::from_rgb(0, 0, 255);
+        let _green = Color32::from_rgb(0, 255, 0);
+        let _blue = Color32::from_rgb(0, 0, 255);
         let white = Color32::from_rgb(255, 255, 255);
 
         let stroke = Stroke::new(2.0, white);
