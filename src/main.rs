@@ -1,8 +1,11 @@
 use eframe::egui;
 
+use crate::constraints::ConstraintDistance;
 use crate::sketch::Point;
+use crate::sketch::Sketch;
 
-mod constrains;
+mod constraints;
+mod constraints_optimiser;
 mod paint;
 mod sketch;
 
@@ -19,10 +22,7 @@ impl eframe::App for MyApp {
                 ui.set_width(ui.available_width());
                 ui.set_height(ui.available_height());
 
-                let sketch_response = self.sketch.ui(ui);
-                if sketch_response.clicked() {
-                    println!("{}", sketch_response.hover_pos().unwrap());
-                }
+                self.sketch.ui(ui);
             });
         });
 
@@ -34,14 +34,21 @@ impl eframe::App for MyApp {
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions::default();
 
-    let mut default_app = MyApp::default();
-
-    default_app.sketch.points.push(Point { x: 100.0, y: 100.0 });
-    default_app.sketch.points.push(Point { x: 150.0, y: 150.0 });
-    default_app
-        .sketch
-        .segments
-        .push((default_app.sketch.points[0], default_app.sketch.points[1]));
+    let points = vec![
+        Point { x: 100.0, y: 100.0 },
+        Point { x: 150.0, y: 150.0 },
+        Point { x: 150.0, y: 300.0 },
+        Point { x: 300.0, y: 300.0 },
+    ];
+    let segments = vec![(0, 1), (1, 2), (2, 0), (2, 3)];
+    let distance_constraints = vec![
+        ConstraintDistance::new(1.0, 100.0, 0, 1),
+        ConstraintDistance::new(1.0, 100.0, 1, 2),
+        ConstraintDistance::new(1.0, 100.0, 2, 0),
+        ConstraintDistance::new(1.0, 100.0, 2, 3),
+    ];
+    let sketch = Sketch::new(points, segments, distance_constraints);
+    let default_app = MyApp { sketch };
 
     eframe::run_native(
         "Pedestrian optimizer",
